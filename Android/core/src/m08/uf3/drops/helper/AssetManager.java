@@ -29,6 +29,14 @@ public class AssetManager {
     public static Texture soldierImage;
     public static Sound dropSound;
 
+    //Textures
+    public static Texture PlayerSoldier;
+
+    //Images
+    public static TextureRegion playerUp, playerDown, playerLeft, playerRight;
+
+    public static TextureRegion[] playerRightAnimation, playerLeftAnimation, playerUpAnimation, playerDownAnimation;
+
     // Font
     public static BitmapFont font;
 
@@ -39,18 +47,27 @@ public class AssetManager {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Maps/map.tmx");
 
-        //Load skin DOESN'T WORK
-        //skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
+        //Jugador
+        PlayerSoldier = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Run.png"));
+        PlayerSoldier.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
+        playerDown = new TextureRegion(PlayerSoldier, 0, 0, 48, 48);
+        playerDown.flip(false, false);
 
-        // load the images for the droplet and the bucket, 64x64 pixels each
-        soldierImage = new Texture(Gdx.files.internal("soldier.png"));
+        playerUp = new TextureRegion(PlayerSoldier, 0, 0, 48, 48);
+        playerUp.flip(false, false);
 
+        playerLeft = new TextureRegion(PlayerSoldier, 0, 0, 48, 48);
+        playerLeft.flip(false, false);
 
+        playerRight = new TextureRegion(PlayerSoldier, 0, 0, 48, 48);
+        playerRight.flip(false, false);
 
-        // load the drop sound effect and the rain background "music"
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("augh.mp3"));
-
+        //Correr derecha
+        playerRightAnimation = new TextureRegion[6];
+        for (int i = 0; i < playerRightAnimation.length; i++) {
+            playerRightAnimation[i] = new TextureRegion(PlayerSoldier, i * 48, 0, 48, 48);
+        }
 
     }
 

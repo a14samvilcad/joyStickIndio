@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,6 +24,11 @@ public class Bucket extends Actor {
     private int width, height;
     private int direction;
 
+    private TextureRegion[] animacionRight;
+    private int currentFrame = 0;
+    private float frameTime = 0.1f;
+    private float stateTime = 0;
+
     private Rectangle collisionRect;
 
     public Bucket(float x, float y, int width, int height){
@@ -37,6 +43,8 @@ public class Bucket extends Actor {
         collisionRect.y = y;
         collisionRect.width = this.width;
         collisionRect.height = this.height;
+
+        animacionRight = AssetManager.playerRightAnimation;
 
         setBounds(position.x, position.y, width, height);
         setTouchable(Touchable.enabled);
@@ -77,6 +85,15 @@ public class Bucket extends Actor {
             collisionRect.width = this.width;
             collisionRect.height = this.height;
 
+        stateTime += delta;
+        if (stateTime >= frameTime){
+            currentFrame++;
+            if (currentFrame >= animacionRight.length){
+                currentFrame = 0;
+            }
+            stateTime = 0;
+        }
+
     }
 
     // Canviem la wallet de la spacecraft: Puja
@@ -97,7 +114,18 @@ public class Bucket extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(AssetManager.soldierImage, this.position.x, this.position.y, width, height);
+        batch.draw(getPLayerDirection(), this.position.x, this.position.y, width, height);
+    }
+
+    private TextureRegion getPLayerDirection() {
+        TextureRegion playerDir = null;
+
+        playerDir = AssetManager.playerDown;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
+            playerDir = animacionRight[currentFrame];
+        }
+        return playerDir;
     }
 
     // Getters dels atributs principals
