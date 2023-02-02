@@ -25,6 +25,8 @@ public class Bucket extends Actor {
     private int direction;
 
     private TextureRegion[] animacionRight;
+    private TextureRegion[] animacionLeft;
+    private TextureRegion[] animacionStatic;
     private int currentFrame = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
@@ -45,6 +47,8 @@ public class Bucket extends Actor {
         collisionRect.height = this.height;
 
         animacionRight = AssetManager.playerRightAnimation;
+        animacionLeft = AssetManager.playerLeftAnimation;
+        animacionStatic = AssetManager.playerStaticAnimation;
 
         setBounds(position.x, position.y, width, height);
         setTouchable(Touchable.enabled);
@@ -120,9 +124,11 @@ public class Bucket extends Actor {
     private TextureRegion getPLayerDirection() {
         TextureRegion playerDir = null;
 
-        playerDir = AssetManager.playerDown;
+        playerDir = animacionStatic[currentFrame];
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+            playerDir = animacionLeft[currentFrame];
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
             playerDir = animacionRight[currentFrame];
         }
         return playerDir;
