@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -70,7 +71,8 @@ public class MainMenuScreen implements Screen {
         BitmapFont font = new BitmapFont();
 
         title = new Label("PLAY", new Label.LabelStyle(font, Color.WHITE));
-        title.setFontScale(Settings.TITLE_RESCALE_SIZE);
+        title.setFontScale(2, 2);
+
         /*
         title.setPosition((Settings.GAME_WIDTH - (title.getWidth() * Settings.TITLE_RESCALE_SIZE)) / 2, ((Settings.GAME_HEIGHT - title.getHeight()) / 2) + 50);
         message = new Label("Pulsa en la pantalla para empezar", new Label.LabelStyle(font, Color.WHITE));
@@ -78,7 +80,7 @@ public class MainMenuScreen implements Screen {
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;
+        textButtonStyle.fontColor = Color.GOLD;
 
         button = new TextButton("", textButtonStyle);
         button.setLabel(title);
@@ -101,19 +103,45 @@ public class MainMenuScreen implements Screen {
 
         //cosas fondo
         batch = new SpriteBatch();
-        backgroundTexture = new Texture(Gdx.files.internal("fondoMenuScreen.jfif"));
+        backgroundTexture = new Texture(Gdx.files.internal("background.jpg"));
         backgroundSprite = new Sprite(backgroundTexture);
+
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float aspectRatio = screenWidth / screenHeight;
+        float textureWidth = backgroundTexture.getWidth();
+        float textureHeight = backgroundTexture.getHeight();
+        float textureAspectRatio = textureWidth / textureHeight;
+
+        if (textureAspectRatio > aspectRatio) {
+            float scale = screenHeight / textureHeight;
+            float width = textureWidth * scale;
+            float height = textureHeight * scale;
+            float x = (screenWidth - width) / 100;
+            float y = 0;
+            backgroundSprite.setBounds(x, y, width, height);
+        } else {
+            float scale = screenWidth / textureWidth;
+            float width = textureWidth * scale;
+            float height = textureHeight * scale;
+            float x = 0;
+            float y = (screenHeight - height) / 100;
+            backgroundSprite.setBounds(x, y, width, height);
+        }
+
+
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
 
-        //cosas fondo
+        //PINTAR FONDO
         batch.begin();
         backgroundSprite.draw(batch);
         batch.end();
 
+        //PINTAR STAGE
         stage.draw();
         stage.act(delta);
 
