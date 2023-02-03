@@ -33,15 +33,15 @@ public class AssetManager {
     public static Texture PlayerSoldierRunRight;
     public static Texture PlayerSoldierRunLeft;
     public static Texture PlayerSoldierStatic;
-    public static Texture PlayerSoldierRunDown;
-    public static Texture PlayerSoldierRunUp;
+    public static Texture Bala;
+
 
 
 
 
 
     //Images
-    public static TextureRegion playerUp, playerDown, playerLeft, playerRight, playerStatic;
+    public static TextureRegion playerLeft, playerRight, playerStatic;
 
     public static TextureRegion[] playerRightAnimation, playerLeftAnimation, playerUpAnimation, playerDownAnimation, playerStaticAnimation;
 
@@ -55,6 +55,8 @@ public class AssetManager {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Maps/map.tmx");
 
+        Bala = new Texture(Gdx.files.internal("playerAnimation/MuzzleFlash.png"));
+
         //Jugador Default
         PlayerSoldierStatic = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Idle.png"));
         PlayerSoldierStatic.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -65,21 +67,11 @@ public class AssetManager {
         PlayerSoldierRunLeft = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Run_Left.png"));
         PlayerSoldierRunLeft.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        PlayerSoldierRunDown = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Run_Down.png"));
-        PlayerSoldierRunDown.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-
-        PlayerSoldierRunUp = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Run_Up.png"));
-        PlayerSoldierRunUp.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Jugador estatico
         playerStatic = new TextureRegion(PlayerSoldierStatic, 0, 0, 48, 48);
         playerStatic.flip(false, false);
 
-        playerDown = new TextureRegion(PlayerSoldierRunDown, 0, 0, 48, 48);
-        playerDown.flip(false, false);
-
-        playerUp = new TextureRegion(PlayerSoldierRunUp, 0, 0, 48, 48);
-        playerUp.flip(false, false);
 
         playerLeft = new TextureRegion(PlayerSoldierRunLeft, 0, 0, 48, 48);
         playerLeft.flip(false, false);
@@ -94,18 +86,6 @@ public class AssetManager {
             playerStaticAnimation[i] = new TextureRegion(PlayerSoldierStatic, i * 48, 0, 48, 48);
         }
 
-
-        //Animacion correr hacia a bajo.
-        playerDownAnimation = new TextureRegion[6];
-        for (int i = 0; i < playerDownAnimation.length; i++) {
-            playerDownAnimation[i] = new TextureRegion(PlayerSoldierRunDown, 0, i * 48, 48, 48);
-        }
-
-        //Animacion correr hacia a arriba.
-        playerUpAnimation = new TextureRegion[6];
-        for (int i = 0; i < playerUpAnimation.length; i++) {
-            playerUpAnimation[i] = new TextureRegion(PlayerSoldierRunUp, 0, i * 48, 48, 48);
-        }
 
         //Correr derecha
         playerRightAnimation = new TextureRegion[6];

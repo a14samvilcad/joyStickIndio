@@ -25,8 +25,6 @@ public class Player extends Actor {
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionLeft;
     private TextureRegion[] animacionStatic;
-    private TextureRegion[] animacionDown;
-    private TextureRegion[] animacionUp;
 
     private int currentFrame = 0;
     private float frameTime = 0.1f;
@@ -50,8 +48,7 @@ public class Player extends Actor {
         animacionRight = AssetManager.playerRightAnimation;
         animacionLeft = AssetManager.playerLeftAnimation;
         animacionStatic = AssetManager.playerStaticAnimation;
-        animacionDown = AssetManager.playerDownAnimation;
-        animacionUp = AssetManager.playerUpAnimation;
+
 
 
 
@@ -136,9 +133,9 @@ public class Player extends Actor {
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
             playerDir = animacionRight[currentFrame];
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.D)){
-            playerDir = animacionDown[currentFrame];
+            playerDir = animacionRight[currentFrame];
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.D)){
-            playerDir = animacionUp[currentFrame];
+            playerDir = animacionRight[currentFrame];
         }
         return playerDir;
     }
