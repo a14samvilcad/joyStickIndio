@@ -134,24 +134,42 @@ public class Player extends Actor {
     }
 
     public void shoot() {
-        Bullet bullet = new Bullet(position.x + width / 2, position.y + height / 2, bulletTexture);
+        float bulletXVelocity = Settings.BULLET_VELOCITY;
+        float bulletYVelocity = 0;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+            bulletXVelocity = -Settings.BULLET_VELOCITY;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
+            bulletXVelocity = 0;
+            bulletYVelocity = Settings.BULLET_VELOCITY;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
+            bulletXVelocity = 0;
+            bulletYVelocity = -Settings.BULLET_VELOCITY;
+        }
+
+        Bullet bullet = new Bullet(position.x + width / 2, position.y + height / 2, bulletXVelocity, bulletYVelocity, bulletTexture);
         getParent().addActor(bullet);
     }
     public class Bullet extends Actor {
         private Texture texture;
         private Vector2 position;
+        private float xVelocity;
+        private float yVelocity;
 
-        public Bullet(float x, float y, Texture texture) {
+        public Bullet(float x, float y, float xVelocity, float yVelocity, Texture texture) {
+            this.position = new Vector2(x, y);
+            this.xVelocity = xVelocity;
+            this.yVelocity = yVelocity;
             this.texture = texture;
-            position = new Vector2(x, y);
-            setBounds(position.x, position.y, texture.getWidth(), texture.getHeight());
         }
 
         @Override
         public void act(float delta) {
             super.act(delta);
-            position.y += 5; // velocidad de la bala
-            setBounds(position.x, position.y, texture.getWidth(), texture.getHeight());
+            position.x += xVelocity * delta;
+            position.y += yVelocity * delta;
         }
 
         @Override
