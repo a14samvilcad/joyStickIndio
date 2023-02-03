@@ -1,0 +1,19 @@
+{"clients": [{
+    "username": "user1",
+    "passwd": "user1",
+    "roles": ["admin"],
+    "isAuth": true
+},
+{
+    "username": "user2",
+    "passwd": "user2",
+    "roles": ["editor", "customer"],
+    "isAuth": true
+},
+{
+    "username": "user3",
+    "passwd": "user3",
+    "roles": ["customer"],
+    "isAuth": false
+}]}
+
