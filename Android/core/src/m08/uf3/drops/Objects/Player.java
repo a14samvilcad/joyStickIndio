@@ -33,6 +33,9 @@ public class Player extends Actor {
     private float frameTime = 0.1f;
     private float stateTime = 0;
 
+    private float timeSinceLastShot;
+    private final float shotInterval = 0.5f; // intervalo de tiempo en segundos entre cada disparo
+
     private Rectangle collisionRect;
 
     public Player(float x, float y, int width, int height){
@@ -64,7 +67,8 @@ public class Player extends Actor {
 
     public void act(float delta){
         super.act(delta);
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+        timeSinceLastShot += delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
                 this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
@@ -134,23 +138,26 @@ public class Player extends Actor {
     }
 
     public void shoot() {
-        float bulletXVelocity = Settings.BULLET_VELOCITY;
-        float bulletYVelocity = 0;
+        if (timeSinceLastShot >= shotInterval) {
+            timeSinceLastShot = 0;
+            float bulletXVelocity = Settings.BULLET_VELOCITY;
+            float bulletYVelocity = 0;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
-            bulletXVelocity = -Settings.BULLET_VELOCITY;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
-            bulletXVelocity = 0;
-            bulletYVelocity = Settings.BULLET_VELOCITY;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
-            bulletXVelocity = 0;
-            bulletYVelocity = -Settings.BULLET_VELOCITY;
-        }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+                bulletXVelocity = -Settings.BULLET_VELOCITY;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+                bulletXVelocity = 0;
+                bulletYVelocity = Settings.BULLET_VELOCITY;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+                bulletXVelocity = 0;
+                bulletYVelocity = -Settings.BULLET_VELOCITY;
+            }
 
-        Bullet bullet = new Bullet(position.x + width / 2, position.y + height / 2, bulletXVelocity, bulletYVelocity, bulletTexture);
-        getParent().addActor(bullet);
+            Bullet bullet = new Bullet(position.x + width/2, position.y + 28, bulletXVelocity, bulletYVelocity, bulletTexture);
+            getParent().addActor(bullet);
+        }
     }
     public class Bullet extends Actor {
         private Texture texture;
