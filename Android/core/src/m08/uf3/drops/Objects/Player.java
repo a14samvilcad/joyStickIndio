@@ -2,6 +2,7 @@ package m08.uf3.drops.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -26,6 +27,8 @@ public class Player extends Actor {
     private TextureRegion[] animacionLeft;
     private TextureRegion[] animacionStatic;
 
+    private Texture bulletTexture;
+
     private int currentFrame = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
@@ -38,6 +41,9 @@ public class Player extends Actor {
         position = new Vector2(x, y);
 
         direction = WALLET_STANDING;
+
+        bulletTexture = AssetManager.Bala;
+
 
         collisionRect = new Rectangle();
         collisionRect.x = x;
@@ -71,8 +77,12 @@ public class Player extends Actor {
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
                 this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            shoot();
+        }
 
-            //Colision personaje con los bordes del mapa
+
+        //Colision personaje con los bordes del mapa
             if (this.position.y <= 5){
                 this.position.y = 5;
             }
@@ -122,6 +132,35 @@ public class Player extends Actor {
         super.draw(batch, parentAlpha);
         batch.draw(getPLayerDirection(), this.position.x, this.position.y, width, height);
     }
+
+    public void shoot() {
+        Bullet bullet = new Bullet(position.x + width / 2, position.y + height / 2, bulletTexture);
+        getParent().addActor(bullet);
+    }
+    public class Bullet extends Actor {
+        private Texture texture;
+        private Vector2 position;
+
+        public Bullet(float x, float y, Texture texture) {
+            this.texture = texture;
+            position = new Vector2(x, y);
+            setBounds(position.x, position.y, texture.getWidth(), texture.getHeight());
+        }
+
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            position.y += 5; // velocidad de la bala
+            setBounds(position.x, position.y, texture.getWidth(), texture.getHeight());
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            super.draw(batch, parentAlpha);
+            batch.draw(texture, position.x, position.y);
+        }
+    }
+
 
     private TextureRegion getPLayerDirection() {
         TextureRegion playerDir = null;

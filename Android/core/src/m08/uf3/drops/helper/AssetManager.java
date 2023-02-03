@@ -55,7 +55,7 @@ public class AssetManager {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Maps/map.tmx");
 
-        Bala = new Texture(Gdx.files.internal("playerAnimation/MuzzleFlash.png"));
+        Bala = new Texture(Gdx.files.internal("playerAnimation/SpongeBullet.png"));
 
         //Jugador Default
         PlayerSoldierStatic = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Idle.png"));
