@@ -2,7 +2,6 @@ package m08.uf3.drops.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,11 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import m08.uf3.drops.helper.AssetManager;
-import m08.uf3.drops.Screens.GameScreen;
 import  m08.uf3.drops.Utils.Settings;
 
 
-public class Bucket extends Actor {
+public class Player extends Actor {
 
     public static final int WALLET_STANDING = 0;
     public static final int WALLET_RIGHT = 1;
@@ -27,13 +25,16 @@ public class Bucket extends Actor {
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionLeft;
     private TextureRegion[] animacionStatic;
+    private TextureRegion[] animacionDown;
+    private TextureRegion[] animacionUp;
+
     private int currentFrame = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
 
     private Rectangle collisionRect;
 
-    public Bucket(float x, float y, int width, int height){
+    public Player(float x, float y, int width, int height){
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
@@ -49,6 +50,10 @@ public class Bucket extends Actor {
         animacionRight = AssetManager.playerRightAnimation;
         animacionLeft = AssetManager.playerLeftAnimation;
         animacionStatic = AssetManager.playerStaticAnimation;
+        animacionDown = AssetManager.playerDownAnimation;
+        animacionUp = AssetManager.playerUpAnimation;
+
+
 
         setBounds(position.x, position.y, width, height);
         setTouchable(Touchable.enabled);
@@ -130,6 +135,10 @@ public class Bucket extends Actor {
             playerDir = animacionLeft[currentFrame];
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
             playerDir = animacionRight[currentFrame];
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.D)){
+            playerDir = animacionDown[currentFrame];
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.D)){
+            playerDir = animacionUp[currentFrame];
         }
         return playerDir;
     }
