@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -32,6 +33,8 @@ public class GameScreen implements Screen {
     final Drops game;
     ShapeRenderer shapeRenderer;
     Label vidas;
+    Label score;
+    BitmapFont font;
 
     //Map
     private OrthographicCamera camera;
@@ -78,6 +81,7 @@ public class GameScreen implements Screen {
         // Afegim els actors a l'stage
         stage.addActor(bucket);
         stage.addActor(vidas);
+        stage.addActor(score);
         // Donem nom a l'Actor
         bucket.setName("bucket");
 
@@ -86,8 +90,13 @@ public class GameScreen implements Screen {
     private void crearLabels(){
         BitmapFont bitmapfont = new BitmapFont();
 
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+
         vidas = new Label("Vidas: "+ Settings.LIVES, new Label.LabelStyle(bitmapfont, Color.WHITE));
-        vidas.setPosition((Settings.GAME_WIDTH - (vidas.getWidth() * Settings.TITLE_RESCALE_SIZE)) / 2, (Settings.GAME_HEIGHT - vidas.getHeight()) / 2);
+        vidas.setPosition(camera.position.x - Gdx.graphics.getWidth() / 2 + 15, camera.position.y + Gdx.graphics.getHeight() / 2 - 2 -vidas.getHeight());
+        score = new Label("Puntuación: "+ Settings.SCORE, new Label.LabelStyle(bitmapfont, Color.WHITE));
+        score.setPosition(camera.position.x - Gdx.graphics.getWidth() / 2 + 80, camera.position.y + Gdx.graphics.getHeight() / 2 - 2 - vidas.getHeight());
 
 
     }
@@ -103,6 +112,7 @@ public class GameScreen implements Screen {
         stage.draw();
         stage.act(delta);
         vidas.setText("Vidas: "+ Settings.LIVES);
+        score.setText("Puntuación: "+ Settings.SCORE);
 
         if(Settings.LIVES < 0){
             stage.dispose();
@@ -131,7 +141,11 @@ public class GameScreen implements Screen {
             if(bucket.getCollisionRectBucket().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2)) && bucket.getCollisionRectBucket().y > (Gdx.graphics.getHeight() / 2)) {
                 camera.position.y = bucket.getCollisionRectBucket().y;
             }
+            vidas.setPosition(camera.position.x - Gdx.graphics.getWidth() / 2 + 15, camera.position.y + Gdx.graphics.getHeight() / 2 - 2 -vidas.getHeight());
+            score.setPosition(camera.position.x - Gdx.graphics.getWidth() / 2 + 80, camera.position.y + Gdx.graphics.getHeight() / 2 - 2 - score.getHeight());
+
         }
+
 
     }
 
