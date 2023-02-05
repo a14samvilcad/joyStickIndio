@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -38,9 +40,15 @@ public class Player extends Actor {
 
     private Rectangle collisionRect;
 
-    public Player(float x, float y, int width, int height){
+    //Mapita manager
+    private TiledMapTileLayer mapTileLayer;
+    private MapProperties propertiesMapa;
+
+    public Player(float x, float y, int width, int height, TiledMapTileLayer mapTileLayer, MapProperties propertiesMapa){
         this.width = width;
         this.height = height;
+        this.mapTileLayer = mapTileLayer;
+        this.propertiesMapa = propertiesMapa;
         position = new Vector2(x, y);
 
         direction = WALLET_STANDING;
@@ -68,18 +76,40 @@ public class Player extends Actor {
     public void act(float delta){
         super.act(delta);
         timeSinceLastShot += delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+        //Cambios SAMU
+        float oldX = this.position.x;
+        float oldY = this.position.y;
+
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
                 this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                if(buscaColision(mapTileLayer, propertiesMapa.get("tilewidth", Integer.class), propertiesMapa.get("tileheight", Integer.class))) {
+                    this.position.x = oldX;
+                    this.position.y = oldY;
+                }
+
+
             }
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
                 this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                if(buscaColision(mapTileLayer, propertiesMapa.get("tilewidth", Integer.class), propertiesMapa.get("tileheight", Integer.class))) {
+                    this.position.x = oldX;
+                    this.position.y = oldY;
+                }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
                 this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                if(buscaColision(mapTileLayer, propertiesMapa.get("tilewidth", Integer.class), propertiesMapa.get("tileheight", Integer.class))) {
+                    this.position.x = oldX;
+                    this.position.y = oldY;
+                }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
                 this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                if(buscaColision(mapTileLayer, propertiesMapa.get("tilewidth", Integer.class), propertiesMapa.get("tileheight", Integer.class))) {
+                    this.position.x = oldX;
+                    this.position.y = oldY;
+                }
             }
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             shoot();
@@ -114,6 +144,14 @@ public class Player extends Actor {
             stateTime = 0;
         }
 
+    }
+
+    private boolean buscaColision(TiledMapTileLayer mapLayer, int tileWidth, int tileHeight) {
+        int tileX = (int) ((this.position.x + (width / 2)) / tileWidth);
+        int tileY = (int) ((this.position.y + (height / 2)) / tileHeight);
+
+        return mapLayer.getCell(tileX, tileY)
+                .getTile().getProperties().containsKey("blocked");
     }
 
     // Canviem la wallet de la spacecraft: Puja
