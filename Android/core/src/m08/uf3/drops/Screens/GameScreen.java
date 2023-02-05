@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -40,6 +41,8 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer tmr;
     private TiledMap map;
+    private TiledMapTileLayer mapLayer;
+    private MapProperties propiedadesMap;
 
     private int tileWidth, tileHeight,
             mapWidthInTiles, mapHeightInTiles,
@@ -49,13 +52,14 @@ public class GameScreen implements Screen {
 
         map = AssetManager.map;
 
-        MapProperties properties = map.getProperties();
-        tileWidth         = properties.get("tilewidth", Integer.class);
-        tileHeight        = properties.get("tileheight", Integer.class);
-        mapWidthInTiles   = properties.get("width", Integer.class);
-        mapHeightInTiles  = properties.get("height", Integer.class);
+        propiedadesMap = map.getProperties();
+        tileWidth         = propiedadesMap.get("tilewidth", Integer.class);
+        tileHeight        = propiedadesMap.get("tileheight", Integer.class);
+        mapWidthInTiles   = propiedadesMap.get("width", Integer.class);
+        mapHeightInTiles  = propiedadesMap.get("height", Integer.class);
         mapWidthInPixels  = mapWidthInTiles  * tileWidth;
         mapHeightInPixels = mapHeightInTiles * tileHeight;
+        mapLayer = (TiledMapTileLayer) map.getLayers().get("Suelo");
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
@@ -76,7 +80,7 @@ public class GameScreen implements Screen {
         batch = stage.getBatch();
 
         // Creem la nau i la resta d'objectes
-        bucket = new Player(368, 20, 64, 64);
+        bucket = new Player(368, 20, 64, 64, mapLayer, propiedadesMap);
 
         // Afegim els actors a l'stage
         stage.addActor(bucket);
