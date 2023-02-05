@@ -12,12 +12,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import java.util.Set;
@@ -33,12 +37,22 @@ public class MainMenuScreen implements Screen {
     final Drops game;
     private Stage stage;
     TextButton button;
+    TextButton settingsButton;
     Label title, message;
 
     //para background
     private SpriteBatch batch;
     private Texture backgroundTexture;
+    private Texture logoTexture;
+
+    private Image playImage;
+    private Image playImage2;
+
+
     private Sprite backgroundSprite;
+
+    private Sprite logoSprite;
+
 
 
     public MainMenuScreen(Drops game) {
@@ -64,14 +78,21 @@ public class MainMenuScreen implements Screen {
         //stage.addActor(title);
         //stage.addActor(message);
         stage.addActor(button);
+        stage.addActor(settingsButton);
     }
 
     private void crearLabels(){
         Gdx.input.setInputProcessor(stage);
         BitmapFont font = new BitmapFont();
 
-        title = new Label("PLAY", new Label.LabelStyle(font, Color.WHITE));
-        title.setFontScale(2, 2);
+        Texture playTexture = new Texture(Gdx.files.internal("BotonJugar1.png"));
+        playImage = new Image(playTexture);
+        playImage.setScale(0.25f);
+
+        Texture settingsTexture = new Texture(Gdx.files.internal("BotonAjustes1.png"));
+        Image settingsImage = new Image(settingsTexture);
+        settingsImage.setScale(0.25f);
+        settingsImage.setPosition(1050,500);
 
         /*
         title.setPosition((Settings.GAME_WIDTH - (title.getWidth() * Settings.TITLE_RESCALE_SIZE)) / 2, ((Settings.GAME_HEIGHT - title.getHeight()) / 2) + 50);
@@ -82,29 +103,63 @@ public class MainMenuScreen implements Screen {
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.GOLD;
 
+
+        Texture playTexture2 = new Texture(Gdx.files.internal("BotonJugar2.png"));
+        playImage2 = new Image(playTexture2);
+        playImage2.setScale(0.25f);
+
         button = new TextButton("", textButtonStyle);
-        button.setLabel(title);
+        button.add(playImage).width(playImage.getWidth()).height(playImage.getHeight());
         button.setColor(Color.BLACK);
-        button.setPosition((Settings.GAME_WIDTH - (button.getWidth() * Settings.TITLE_RESCALE_SIZE)) / 2, (Settings.GAME_HEIGHT - button.getHeight()) / 1.2f);
+        button.setPosition((1050), (450));
+
+        settingsButton = new TextButton("", textButtonStyle);
+        settingsButton.add(settingsImage).width(settingsImage.getWidth()).height(settingsImage.getHeight());
+        settingsButton.setColor(Color.BLACK);
+        settingsButton.setPosition((1050), (300));
+
 
 
     }
 
     @Override
     public void show() {
-        //Pulsar boton PLAY
-        if (button.addCaptureListener(new ChangeListener() {
+
+        button.addListener(new InputListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(gameScreen);
-                dispose();
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                button.add(playImage2);
+                button.addCaptureListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                game.setScreen(gameScreen);
+                                dispose();
+                            }
+                        }, 3/4); // 1 es el tiempo en segundos antes de que se ejecute la tarea
+                    }
+                });
             }
-        }));
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                button.add(playImage).width(playImage.getWidth()).height(playImage.getHeight());
+            }
+        });
+        //Pulsar boton PLAY
+
 
         //cosas fondo
         batch = new SpriteBatch();
-        backgroundTexture = new Texture(Gdx.files.internal("background.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("Background3.png"));
         backgroundSprite = new Sprite(backgroundTexture);
+
+        logoTexture = new Texture(Gdx.files.internal("LogoMenuShadow.png"));
+        logoSprite = new Sprite(logoTexture);
+
+        logoSprite.setBounds(450, (Settings.GAME_HEIGHT/2), 400, 240);
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -139,6 +194,7 @@ public class MainMenuScreen implements Screen {
         //PINTAR FONDO
         batch.begin();
         backgroundSprite.draw(batch);
+        logoSprite.draw(batch);
         batch.end();
 
         //PINTAR STAGE
