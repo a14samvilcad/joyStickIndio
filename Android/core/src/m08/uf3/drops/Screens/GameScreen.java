@@ -49,9 +49,9 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer mapLayer;
     private MapProperties propiedadesMap;
 
-    private int tileWidth, tileHeight,
-            mapWidthInTiles, mapHeightInTiles,
-            mapWidthInPixels, mapHeightInPixels;
+    private int tileWidth, tileHeight;
+    private int mapWidthInTiles, mapHeightInTiles;
+    private int mapWidthInPixels, mapHeightInPixels;
 
     public GameScreen(Batch prevBatch, Viewport prevViewport, Drops game) {
 
@@ -73,6 +73,8 @@ public class GameScreen implements Screen {
 
         this.game = game;
         Settings.LIVES = 3;
+
+        //Labels de vida y puntuacion
         crearLabels();
 
 
