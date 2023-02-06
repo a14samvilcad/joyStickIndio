@@ -21,4 +21,24 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+ <tile id="161">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="162">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="164">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="165">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
 </tileset>
