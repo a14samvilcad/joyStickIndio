@@ -15,23 +15,27 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import m08.uf3.drops.Drops;
 import m08.uf3.drops.Objects.Player;
+import m08.uf3.drops.Objects.Zombies;
 import m08.uf3.drops.Utils.Settings;
 import m08.uf3.drops.helper.AssetManager;
 
 public class GameScreen implements Screen {
     Array<Rectangle> raindrops;
-    long lastDropTime;
+    long lastZombieTime;
     Stage stage;
     Batch batch;
     Player bucket;
+    Zombies zombies;
     final Drops game;
     ShapeRenderer shapeRenderer;
     Label vidas;
@@ -108,6 +112,19 @@ public class GameScreen implements Screen {
 
     }
 
+    private void spawnZombie() {
+        /*Rectangle zombieRect = new Rectangle();
+        zombieRect.x = MathUtils.random(0, 800-46);
+        zombieRect.y = MathUtils.random(0, 800-77);
+        zombieRect.width = 46;
+        zombieRect.height = 77;
+        zombieDrops.add(zombieRect); */
+
+        zombies = new Zombies(MathUtils.random(0, 800-46), MathUtils.random(0, 800-77), 46,77);
+        stage.addActor(zombies);
+        lastZombieTime = TimeUtils.nanoTime();
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
@@ -120,6 +137,8 @@ public class GameScreen implements Screen {
         stage.act(delta);
         vidas.setText("Vidas: "+ Settings.LIVES);
         score.setText("Puntuación: "+ Settings.SCORE);
+        if(TimeUtils.nanoTime() - lastZombieTime > 2000000000) spawnZombie();
+
 
         if(Settings.LIVES < 0){
             stage.dispose();

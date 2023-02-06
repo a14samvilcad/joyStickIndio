@@ -23,12 +23,6 @@ public class AssetManager {
     public static TmxMapLoader mapLoader;
     public static Pixmap cursorZombie;
 
-    //Skin
-    public static Skin skin;
-
-    //ImageButton play
-    ImageButton buttonPlay;
-
     public static Texture soldierImage;
     public static Sound dropSound;
 
@@ -37,6 +31,7 @@ public class AssetManager {
     public static Texture PlayerSoldierRunLeft;
     public static Texture PlayerSoldierStatic;
     public static Texture Bala;
+    public static Texture ZombieGhoulStatic;
 
 
 
@@ -45,14 +40,19 @@ public class AssetManager {
 
     //Images
     public static TextureRegion playerLeft, playerRight, playerStatic;
+    public static TextureRegion ZombieGhoulStaticRegion;
 
-    public static TextureRegion[] playerRightAnimation, playerLeftAnimation, playerUpAnimation, playerDownAnimation, playerStaticAnimation;
+
+    public static TextureRegion[] playerRightAnimation, playerLeftAnimation, playerStaticAnimation;
+    public static TextureRegion[] ZombieGhoulStaticAnimation;
 
     // Font
     public static BitmapFont font;
 
     //Load textures
     public static void load() {
+
+        ZombieGhoulStatic = new Texture(Gdx.files.internal("soldier.png"));
 
         //Load Map
         mapLoader = new TmxMapLoader();
@@ -65,6 +65,8 @@ public class AssetManager {
         smallCursor.drawPixmap(cursorZombie, 0, 0, cursorZombie.getWidth(), cursorZombie.getHeight(), 0, 0, smallCursor.getWidth(), smallCursor.getHeight());
         cursorZombie = smallCursor;
 
+        ZombieGhoulStatic = new Texture(Gdx.files.internal("Zombies/GhoulZombie.png"));
+        ZombieGhoulStatic.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Jugador Default
         PlayerSoldierStatic = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Idle.png"));
@@ -77,6 +79,9 @@ public class AssetManager {
         PlayerSoldierRunLeft.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
 
+        ZombieGhoulStaticRegion = new TextureRegion(ZombieGhoulStatic, 0, 3, 32, 32);
+        ZombieGhoulStaticRegion.flip(false, false);
+
         //Jugador estatico
         playerStatic = new TextureRegion(PlayerSoldierStatic, 0, 0, 48, 48);
         playerStatic.flip(false, false);
@@ -88,6 +93,11 @@ public class AssetManager {
         playerRight = new TextureRegion(PlayerSoldierRunRight, 0, 0, 48, 48);
         playerRight.flip(false, false);
 
+        //Animacion ZombieGhoul
+        ZombieGhoulStaticAnimation = new TextureRegion[4];
+        for (int i = 0; i < ZombieGhoulStaticAnimation.length; i++) {
+            ZombieGhoulStaticAnimation[i] = new TextureRegion(ZombieGhoulStaticRegion, i * 32, 3, 32, 32);
+        }
 
         //Animación estatica
         playerStaticAnimation = new TextureRegion[6];
