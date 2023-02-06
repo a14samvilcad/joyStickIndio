@@ -120,7 +120,7 @@ public class GameScreen implements Screen {
         zombieRect.height = 77;
         zombieDrops.add(zombieRect); */
 
-        zombies = new Zombies(MathUtils.random(0, 800-46), MathUtils.random(0, 800-77), 46,77);
+        zombies = new Zombies(MathUtils.random(0, 800-46), MathUtils.random(0, 800-77), 46,77, bucket);
         stage.addActor(zombies);
         lastZombieTime = TimeUtils.nanoTime();
     }

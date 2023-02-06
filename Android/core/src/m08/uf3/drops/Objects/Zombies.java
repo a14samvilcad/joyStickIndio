@@ -20,6 +20,8 @@ public class Zombies extends Actor {
     private int width, height;
     private int vida = 3;
 
+    private Player player;
+
     private TextureRegion[] animacionStatic;
 
     private int currentFrame = 0;
@@ -28,10 +30,16 @@ public class Zombies extends Actor {
 
     private Rectangle collisionRect;
 
-    public Zombies (float x, float y, int width, int height){
+    private Vector2 velocity = new Vector2();
+    private float speed = 100;
+
+    public Zombies (float x, float y, int width, int height, Player player){
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
+
+        position = new Vector2(x, y);
+        this.player = player;
 
         collisionRect = new Rectangle();
         collisionRect.x = x;
@@ -47,6 +55,13 @@ public class Zombies extends Actor {
 
     public void act(float delta){
         super.act(delta);
+
+        Vector2 playerPosition = new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2);
+        Vector2 zombiePosition = new Vector2(position.x + width / 2, position.y + height / 2);
+
+        velocity = playerPosition.sub(zombiePosition).nor().scl(speed);
+
+        position.add(velocity.x * delta, velocity.y * delta);
 
         //Colision personaje con los bordes del mapa
         if (this.position.y <= 5){
