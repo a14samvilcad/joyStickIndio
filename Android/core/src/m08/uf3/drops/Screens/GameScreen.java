@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -71,6 +72,7 @@ public class GameScreen implements Screen {
         crearLabels();
 
 
+
         // Creem el ShapeRenderer
         shapeRenderer = new ShapeRenderer();
 
@@ -96,6 +98,7 @@ public class GameScreen implements Screen {
 
         batch = new SpriteBatch();
         font = new BitmapFont();
+
 
         vidas = new Label("Vidas: "+ Settings.LIVES, new Label.LabelStyle(bitmapfont, Color.WHITE));
         vidas.setPosition(camera.position.x - Gdx.graphics.getWidth() / 2 + 15, camera.position.y + Gdx.graphics.getHeight() / 2 - 2 -vidas.getHeight());

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,6 +21,7 @@ public class AssetManager {
     //Map
     public static TiledMap map;
     public static TmxMapLoader mapLoader;
+    public static Pixmap cursorZombie;
 
     //Skin
     public static Skin skin;
@@ -56,6 +59,12 @@ public class AssetManager {
         map = mapLoader.load("Maps/map.tmx");
 
         Bala = new Texture(Gdx.files.internal("playerAnimation/Bullets/defaultBullet.png"));
+
+        cursorZombie = new Pixmap(Gdx.files.internal("cursor.png"));
+        Pixmap smallCursor = new Pixmap(cursorZombie.getWidth()/2, cursorZombie.getHeight()/2, cursorZombie.getFormat());
+        smallCursor.drawPixmap(cursorZombie, 0, 0, cursorZombie.getWidth(), cursorZombie.getHeight(), 0, 0, smallCursor.getWidth(), smallCursor.getHeight());
+        cursorZombie = smallCursor;
+
 
         //Jugador Default
         PlayerSoldierStatic = new Texture(Gdx.files.internal("playerAnimation/Red/Gunner_Red_Idle.png"));
@@ -104,6 +113,7 @@ public class AssetManager {
     public static void dispose() {
         soldierImage.dispose();
         dropSound.dispose();
+        cursorZombie.dispose();
 
     }
 }

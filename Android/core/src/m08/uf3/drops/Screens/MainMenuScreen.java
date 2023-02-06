@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -28,6 +29,7 @@ import java.util.Set;
 
 import m08.uf3.drops.Drops;
 import m08.uf3.drops.Utils.Settings;
+import m08.uf3.drops.helper.AssetManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -94,6 +96,8 @@ public class MainMenuScreen implements Screen {
         settingsImage.setScale(0.25f);
         settingsImage.setPosition(1050,500);
 
+        Cursor cursor = Gdx.graphics.newCursor(AssetManager.cursorZombie, 0, 0);
+        Gdx.graphics.setCursor(cursor);
         /*
         title.setPosition((Settings.GAME_WIDTH - (title.getWidth() * Settings.TITLE_RESCALE_SIZE)) / 2, ((Settings.GAME_HEIGHT - title.getHeight()) / 2) + 50);
         message = new Label("Pulsa en la pantalla para empezar", new Label.LabelStyle(font, Color.WHITE));
@@ -128,7 +132,7 @@ public class MainMenuScreen implements Screen {
         button.addListener(new InputListener() {
             @Override
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                button.add(playImage2);
+                //button.add(playImage2).width(playImage2.getWidth()).height(playImage2.getHeight());
                 button.addCaptureListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
