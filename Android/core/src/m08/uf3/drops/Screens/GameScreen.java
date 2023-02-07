@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import m08.uf3.drops.Drops;
 import m08.uf3.drops.Objects.Player;
 import m08.uf3.drops.Objects.Zombies;
+import m08.uf3.drops.Utils.JoyStick;
 import m08.uf3.drops.Utils.Settings;
 import m08.uf3.drops.helper.AssetManager;
 
@@ -53,6 +55,10 @@ public class GameScreen implements Screen {
     private int mapWidthInTiles, mapHeightInTiles;
     private int mapWidthInPixels, mapHeightInPixels;
 
+    //Joystick android
+    JoyStick joyStick;
+    Vector3 mouse;
+
     public GameScreen(Batch prevBatch, Viewport prevViewport, Drops game) {
 
         map = AssetManager.map;
@@ -71,16 +77,20 @@ public class GameScreen implements Screen {
 
         tmr = new OrthogonalTiledMapRenderer(map);
 
+        //Game variables settings
         this.game = game;
         Settings.LIVES = 3;
 
         //Labels de vida y puntuacion
         crearLabels();
 
-
-
+        //New Joystick
+        mouse = new Vector3();
+        joyStick = new JoyStick(-500, -250, 50);
         // Creem el ShapeRenderer
         shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+
 
         // Creem l'stage i assginem el viewport
         stage = new Stage(prevViewport, prevBatch);
@@ -96,6 +106,7 @@ public class GameScreen implements Screen {
         stage.addActor(score);
         // Donem nom a l'Actor
         bucket.setName("bucket");
+
 
     }
 
@@ -127,8 +138,17 @@ public class GameScreen implements Screen {
         lastZombieTime = TimeUtils.nanoTime();
     }
 
+    public void update(){
+        if (Gdx.input.isTouched(0)) {
+            camera.unproject(mouse.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+            joyStick.update(mouse.x, mouse.y);
+        }
+    }
+
     @Override
     public void render(float delta) {
+        update();
+
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cameraPosition();
@@ -139,6 +159,11 @@ public class GameScreen implements Screen {
         stage.act(delta);
         vidas.setText("Vidas: "+ Settings.LIVES);
         score.setText("Puntuación: "+ Settings.SCORE);
+
+        //Joystick render !IMPORTANTE RENDERIZA EL BOTON HAY QUE CAMBIARLO PARA QUE SOLO LO
+        // RENDERIZE EN ANDROID
+        joyStick.render(shapeRenderer);
+
         if(TimeUtils.nanoTime() - lastZombieTime > 2000000000) spawnZombie();
 
 
@@ -205,6 +230,7 @@ public class GameScreen implements Screen {
         AssetManager.dispose();
         tmr.dispose();
         map.dispose();
+        shapeRenderer.dispose();
     }
 
 }
